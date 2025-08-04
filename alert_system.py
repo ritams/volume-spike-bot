@@ -35,10 +35,10 @@ class AlertSystem:
         # Momentum indicators
         price_vs_ema = "✅ Above EMA" if data['price_above_ema'] else "❌ Below EMA"
         
-        if data['ema_slope_up'] is not None:
-            slope_indicator = "✅ EMA Rising" if data['ema_slope_up'] else "❌ EMA Falling"
+        if data['ema_slope_up'] is True:
+            slope_indicator = "✅ EMA Rising"
         else:
-            slope_indicator = "❓ EMA Slope Unknown"
+            slope_indicator = "❓ EMA Slope Unknown/Flat/Down"
         
         return (
             f"🚨 VOLUME SPIKE + MOMENTUM DETECTED\n"

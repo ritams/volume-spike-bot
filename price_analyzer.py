@@ -77,10 +77,13 @@ class PriceAnalyzer:
         ema_values = list(self.ema_history[token])
         
         if len(ema_values) < 3:
-            return None  # Not enough data for slope calculation
+            return None  # Not enough data for slope calculation - unknown
         
         # Check if last 3 EMA values are strictly increasing
-        return ema_values[-3] < ema_values[-2] < ema_values[-1]
+        is_upward = ema_values[-3] < ema_values[-2] < ema_values[-1]
+        
+        # Return True if upward, None if not upward (unknown)
+        return True if is_upward else None
     
     def has_sufficient_data(self, token: str) -> bool:
         """Check if token has enough data for EMA analysis"""
@@ -96,6 +99,6 @@ class PriceAnalyzer:
             return "Calculation failed"
         
         price_status = "✅ Above" if ema_data['price_above_ema'] else "❌ Below"
-        slope_status = "✅ Up" if ema_data['ema_slope_up'] else "❌ Flat/Down" if ema_data['ema_slope_up'] is not None else "❓ Unknown"
+        slope_status = "✅ Up" if ema_data['ema_slope_up'] is True else "❓ Unknown/Flat/Down"
         
         return f"Price {price_status} {ema_data['method']}-21 | Slope {slope_status} | Periods: {ema_data['periods_used']}" 

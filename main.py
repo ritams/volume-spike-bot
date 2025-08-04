@@ -109,10 +109,9 @@ class VolumeSpikeBot:
         
         # Optional: EMA slope filter
         if Config.EMA_SLOPE_FILTER_ENABLED:
-            if ema_stats['ema_slope_up'] is False:  # Explicitly False (not None)
-                return False  # EMA not sloping up, reject signal
-            elif ema_stats['ema_slope_up'] is True:
-                momentum_conditions.append("EMA Rising")
+            if ema_stats['ema_slope_up'] is not True:
+                return False  # EMA not rising, reject signal
+            momentum_conditions.append("EMA Rising")
         
         # STEP 4: Send alert with combined data
         alert_data = {
@@ -206,7 +205,7 @@ class VolumeSpikeBot:
                 
                 # Wait for next cycle
                 if self.running:
-                    wait_seconds = Config.UPDATE_INTERVAL_MINUTES * 60
+                    wait_seconds = Config.UPDATE_INTERVAL_MINUTES * 1
                     print(f"⏳ Waiting {Config.UPDATE_INTERVAL_MINUTES} minutes until next cycle...")
                     
                     # Sleep in small chunks to allow for graceful shutdown
